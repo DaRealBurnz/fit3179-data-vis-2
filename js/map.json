@@ -3,6 +3,30 @@
     "width": 500,
     "height": 450,
     "title": "Restaurants in Kyoto",
+    "params": [
+        {
+            "name": "minRating",
+            "value": 0,
+            "bind": {
+                "input": "range",
+                "min": 0,
+                "max": 5,
+                "step": 0.1,
+                "name": "Minimum Rating: "
+            }
+        },
+        {
+            "name": "minReviews",
+            "value": 0,
+            "bind": {
+                "input": "range",
+                "min": 0,
+                "max": 300,
+                "step": 5,
+                "name": "Minimum No. of Reviews: "
+            }
+        }
+    ],
     "projection": {
         "type": "equirectangular"
     },
@@ -52,6 +76,10 @@
             "data": {
                 "url": "../data/Kyoto_Restaurant_Info.csv"
             },
+            "transform": [
+                {"filter": "datum.TotalRating > minRating"},
+                {"filter": "datum.ReviewNum > minReviews"}
+            ],
             "mark": {
                 "type": "circle",
                 "tooltip": {"content": "data"}
@@ -70,7 +98,7 @@
                     "title": "Restaurant Rating",
                     "scale": {
                         "type": "bin-ordinal",
-                        "range": ["#edf8fb","#b3cde3","#8c96c6","#8856a7","#810f7c"],
+                        "range": ["#f0f9e8","#bae4bc","#7bccc4","#43a2ca","#0868ac"],
                         "domain": [0,1,2,3,4,5]
                     }
                 },
@@ -81,7 +109,15 @@
                     "scale": {
                         "range": [30,1000]
                     }
-                }
+                },
+                "tooltip": [
+                    {"field": "Name", "type": "nominal"},
+                    {"field": "JapaneseName", "type": "nominal", "title": "Japanese Name"},
+                    {"field": "FirstCategory", "type": "nominal", "title": "First Category"},
+                    {"field": "SecondCategory", "type": "nominal", "title": "Second Category"},
+                    {"field": "TotalRating", "type": "quantitative", "title": "Restaurant Rating"},
+                    {"field": "ReviewNum", "type": "quantitative", "title": "No. of Reviews"}
+                ]
             }
         }
     ]
