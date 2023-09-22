@@ -28,7 +28,8 @@
         }
     ],
     "projection": {
-        "type": "equirectangular"
+        "type": "azimuthalEqualArea",
+        "rotate": [225, 275, 0]
     },
     "layer": [
         {
