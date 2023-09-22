@@ -1,0 +1,88 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 450,
+    "title": "Restaurants in Kyoto",
+    "projection": {
+        "type": "equirectangular"
+    },
+    "layer": [
+        {
+            "data": {
+                "url": "../data/KyotoMap.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "Kyoto"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "rosybrown",
+                "stroke": "white"
+            }
+        },
+        {
+            "data": {
+                "url": "../data/KyotoMap.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "OtherPrefectures"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "lightgray",
+                "stroke": "white"
+            }
+        },
+        {
+            "data": {
+                "url": "../data/KyotoMap.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "graticules"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "stroke": "gray"
+            }
+        },
+        {
+            "data": {
+                "url": "../data/Kyoto_Restaurant_Info.csv"
+            },
+            "mark": {
+                "type": "circle",
+                "tooltip": {"content": "data"}
+            },
+            "encoding": {
+                "longitude": {
+                    "field": "Long",
+                    "type": "quantitative"
+                },
+                "latitude": {
+                    "field": "Lat",
+                    "type": "quantitative"
+                },
+                "color": {
+                    "field": "TotalRating",
+                    "title": "Restaurant Rating",
+                    "scale": {
+                        "type": "bin-ordinal",
+                        "range": ["#edf8fb","#b3cde3","#8c96c6","#8856a7","#810f7c"],
+                        "domain": [0,1,2,3,4,5]
+                    }
+                },
+                "size": {
+                    "field": "ReviewNum",
+                    "type": "quantitative",
+                    "title": "No. of Reviews",
+                    "scale": {
+                        "range": [30,1000]
+                    }
+                }
+            }
+        }
+    ]
+}
