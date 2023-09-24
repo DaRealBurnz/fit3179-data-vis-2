@@ -33,7 +33,7 @@
     "layer": [
         {
             "data": {
-                "url": "../data/KyotoMap.json",
+                "url": "data/KyotoMap.json",
                 "format": {
                     "type": "topojson",
                     "feature": "Kyoto"
@@ -47,7 +47,7 @@
         },
         {
             "data": {
-                "url": "../data/KyotoMap.json",
+                "url": "data/KyotoMap.json",
                 "format": {
                     "type": "topojson",
                     "feature": "OtherPrefectures"
@@ -61,7 +61,7 @@
         },
         {
             "data": {
-                "url": "../data/KyotoMap.json",
+                "url": "data/KyotoMap.json",
                 "format": {
                     "type": "topojson",
                     "feature": "graticules"
@@ -74,7 +74,7 @@
         },
         {
             "data": {
-                "url": "../data/Kyoto_Restaurant_Info.csv"
+                "url": "data/Kyoto_Restaurant_Info.csv"
             },
             "transform": [
                 {"filter": "datum.TotalRating > minRating"},
