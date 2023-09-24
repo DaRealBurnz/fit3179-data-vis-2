@@ -29,7 +29,7 @@
     ],
     "projection": {
         "type": "azimuthalEqualArea",
-        "rotate": [225, 275, 0]
+        "rotate": [-135.755611, -35.021667, 0]
     },
     "layer": [
         {
