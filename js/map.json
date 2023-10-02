@@ -9,9 +9,9 @@
             "value": 0,
             "bind": {
                 "input": "range",
-                "min": 0,
-                "max": 5,
-                "step": 0.1,
+                "min": 3,
+                "max": 4.1,
+                "step": 0.05,
                 "name": "Minimum Rating: "
             }
         },
@@ -99,8 +99,8 @@
                     "title": "Restaurant Rating",
                     "scale": {
                         "type": "bin-ordinal",
-                        "range": ["#f0f9e8","#bae4bc","#7bccc4","#43a2ca","#0868ac"],
-                        "domain": [0,1,2,3,4,5]
+                        "range": ["#f0f9e8","#ccebc5","#a8ddb5","#7bccc4","#43a2ca","#0868ac"],
+                        "domain": [3,3.2,3.4,3.6,3.8,4,4.2]
                     }
                 },
                 "size": {
