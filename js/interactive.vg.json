@@ -4,24 +4,93 @@
     "height": 450,
     "title": "Restaurant price ranges",
     "data": {
-        "url": "data/Kyoto_Restaurant_Info.csv"
+        "url": "../data/Kyoto_Restaurant_Info.csv"
     },
     "transform": [
-        {"fold": ["DinnerPrice", "LunchPrice"]}
+        {
+            "filter": "datum.Lunch != 'NA'"
+        },
+        {
+            "fold": [
+                "Dinner",
+                "Lunch"
+            ]
+        }
     ],
-    "mark": "bar",
+    "params": [
+        {
+            "name": "legendFilter",
+            "select": {
+                "type": "point",
+                "fields": [
+                    "key"
+                ]
+            },
+            "bind": "legend"
+        }
+    ],
     "encoding": {
         "x": {
             "field": "value",
-            "type": "nominal",
-            "sort": [" ～￥999", "￥1000～￥1999", "￥2000～￥2999", "￥3000～￥3999", "￥4000～￥4999", "￥5000～￥5999", "￥6000～￥7999", "￥8000～￥9999", "￥10000～￥14999", "￥15000～￥19999", "￥20000～￥29999", "￥30000～"]
+            "type": "ordinal",
+            "title": "Price Range",
+            "sort": [
+                " ～￥999",
+                "￥1000～￥1999",
+                "￥2000～￥2999",
+                "￥3000～￥3999",
+                "￥4000～￥4999",
+                "￥5000～￥5999",
+                "￥6000～￥7999",
+                "￥8000～￥9999",
+                "￥10000～￥14999",
+                "￥15000～￥19999",
+                "￥20000～￥29999",
+                "￥30000～"
+            ]
         },
         "y": {
             "aggregate": "count",
             "type": "quantitative",
             "title": "Number of Restaurants"
-        },
-        "color": {"field": "key"},
-        "xOffset": {"field": "key"}
-    }
+        }
+    },
+    "layer": [
+        {
+            "mark": "bar",
+            "encoding": {
+                "color": {
+                    "field": "key",
+                    "title": "Meal Types"
+                },
+                "xOffset": {
+                    "field": "key"
+                },
+                "opacity": {
+                    "condition": {
+                        "param": "legendFilter",
+                        "value": 1
+                    },
+                    "value": 0.2
+                },
+                "tooltip": [
+                    {
+                        "field": "key",
+                        "type": "nominal",
+                        "title": "Meal Type"
+                    },
+                    {
+                        "field": "value",
+                        "type": "ordinal",
+                        "title": "Price Range"
+                    },
+                    {
+                        "aggregate": "count",
+                        "type": "quantitative",
+                        "title": "No. of Restaurants"
+                    }
+                ]
+            }
+        }
+    ]
 }
