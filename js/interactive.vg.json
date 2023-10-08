@@ -17,18 +17,6 @@
             ]
         }
     ],
-    "params": [
-        {
-            "name": "legendFilter",
-            "select": {
-                "type": "point",
-                "fields": [
-                    "key"
-                ]
-            },
-            "bind": "legend"
-        }
-    ],
     "encoding": {
         "x": {
             "field": "value",
@@ -57,6 +45,7 @@
     },
     "layer": [
         {
+            
             "mark": "bar",
             "encoding": {
                 "color": {
@@ -90,6 +79,38 @@
                         "title": "No. of Restaurants"
                     }
                 ]
+            },
+            "params": [
+                {
+                    "name": "legendFilter",
+                    "select": {
+                        "type": "point",
+                        "fields": [
+                            "key"
+                        ]
+                    },
+                    "bind": "legend"
+                }
+            ]
+        },
+        {
+            "data": {
+                "values": [
+                    {"label": "895 restaurants offer dinner/484 restaurants offer lunch", "value": "￥30000～"}
+                ]
+            },
+            "transform": [
+                {"calculate": "split(datum.label, '/')", "as": "splitLabel"}
+            ],
+            "mark": {
+                "type": "text",
+                "align": "right",
+                "fontSize": 12,
+                "dx": 10,
+                "dy": -435
+            },
+            "encoding": {
+                "text": {"field": "splitLabel"}
             }
         }
     ]
