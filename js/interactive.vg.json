@@ -4,7 +4,7 @@
     "height": 450,
     "title": "Restaurant price ranges",
     "data": {
-        "url": "../data/Kyoto_Restaurant_Info.csv"
+        "url": "data/Kyoto_Restaurant_Info.csv"
     },
     "transform": [
         {
