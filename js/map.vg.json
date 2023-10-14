@@ -1,7 +1,13 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "data": {
-        "url": "data/Kyoto_Restaurant_Info.csv"
+        "url": "data/Kyoto_Restaurant_Info.csv",
+        "format": {
+            "parse": {
+                "ReviewNum": "number",
+                "TotalRating": "number"
+            }
+        }
     },
     "transform": [
         {
@@ -9,15 +15,6 @@
         },
         {
             "filter": "datum.ReviewNum >= minReviews"
-        },
-        {
-            "filter": "datum.Lunch != 'NA'"
-        },
-        {
-            "fold": [
-                "Dinner",
-                "Lunch"
-            ]
         }
     ],
     "params": [
@@ -208,84 +205,229 @@
             ]
         },
         {
-            "title": "Restaurant price ranges",
-            "mark": "bar",
-            "transform": [
+            "hconcat": [
                 {
-                    "filter": {
-                        "param": "mapSelect"
-                    }
+                    "title": "Highest No. of Reviews",
+                    "transform": [
+                        {
+                            "window": [
+                                {
+                                    "op": "rank",
+                                    "as": "rank"
+                                }
+                            ],
+                            "sort": [
+                                {
+                                    "field": "ReviewNum",
+                                    "order": "descending"
+                                }
+                            ]
+                        },
+                        {
+                            "filter": "datum.rank <= 3"
+                        }
+                    ],
+                    "encoding": {
+                        "x": {
+                            "field": "ReviewNum",
+                            "type": "quantitative",
+                            "axis": null
+                        },
+                        "y": {
+                            "field": "Name",
+                            "sort": "-x",
+                            "title": null
+                        }
+                    },
+                    "layer": [
+                        {
+                            "mark": {
+                                "type": "bar",
+                                "height": {"band": 0.2}
+                            }
+                        },
+                        {
+                            "mark": {
+                                "type": "point",
+                                "size": 60,
+                                "filled": true,
+                                "opacity": 1
+                            }
+                        },
+                        {
+                            "mark": {
+                                "type": "text",
+                                "dx": 10,
+                                "align": "left"
+                            },
+                            "encoding": {
+                                "text": {
+                                    "field": "ReviewNum"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "Highest ratings",
+                    "transform": [
+                        {
+                            "window": [
+                                {
+                                    "op": "rank",
+                                    "as": "rank"
+                                }
+                            ],
+                            "sort": [
+                                {
+                                    "field": "TotalRating",
+                                    "order": "descending"
+                                }
+                            ]
+                        },
+                        {
+                            "filter": "datum.rank <= 3"
+                        }
+                    ],
+                    "encoding": {
+                        "x": {
+                            "field": "TotalRating",
+                            "type": "quantitative",
+                            "axis": null,
+                            "scale": {
+                                "domainMin": 3.9
+                            }
+                        },
+                        "y": {
+                            "field": "Name",
+                            "sort": "-x",
+                            "title": null
+                        }
+                    },
+                    "layer": [
+                        {
+                            "mark": {
+                                "type": "bar",
+                                "height": {"band": 0.2},
+                                "clip": true
+                            }
+                        },
+                        {
+                            "mark": {
+                                "type": "point",
+                                "size": 60,
+                                "filled": true,
+                                "opacity": 1
+                            }
+                        },
+                        {
+                            "mark": {
+                                "type": "text",
+                                "dx": 10,
+                                "align": "left"
+                            },
+                            "encoding": {
+                                "text": {
+                                    "field": "TotalRating"
+                                }
+                            }
+                        }
+                    ]
                 }
-            ],
-            "encoding": {
-                "x": {
-                    "field": "value",
-                    "type": "ordinal",
-                    "title": "Price Range",
-                    "scale": {
-                        "domain": [
-                            " ～￥999",
-                            "￥1000～￥1999",
-                            "￥2000～￥2999",
-                            "￥3000～￥3999",
-                            "￥4000～￥4999",
-                            "￥5000～￥5999",
-                            "￥6000～￥7999",
-                            "￥8000～￥9999",
-                            "￥10000～￥14999",
-                            "￥15000～￥19999",
-                            "￥20000～￥29999",
-                            "￥30000～"
-                        ]
-                    }
-                },
-                "y": {
-                    "aggregate": "count",
-                    "type": "quantitative",
-                    "title": "Number of Restaurants"
-                },
-                "color": {
-                    "field": "key",
-                    "title": "Meal Types"
-                },
-                "xOffset": {
-                    "field": "key"
-                },
-                "opacity": {
-                    "condition": {
-                        "param": "legendFilter",
-                        "value": 1
-                    },
-                    "value": 0.2
-                },
-                "tooltip": [
-                    {
-                        "field": "key",
-                        "type": "nominal",
-                        "title": "Meal Type"
-                    },
-                    {
-                        "field": "value",
-                        "type": "ordinal",
-                        "title": "Price Range"
-                    },
-                    {
-                        "aggregate": "count",
-                        "type": "quantitative",
-                        "title": "No. of Restaurants"
-                    }
-                ]
-            },
-            "params": [
+            ]
+        },
+        {
+            "hconcat": [
                 {
-                    "name": "legendFilter",
-                    "select": {
-                        "type": "point",
-                        "fields": [
-                            "key"
+                    "title": "Restaurant price ranges",
+                    "mark": "bar",
+                    "transform": [
+                        {
+                            "fold": [
+                                "Dinner",
+                                "Lunch"
+                            ]
+                        },
+                        {
+                            "filter": "datum.value != 'NA'"
+                        },
+                        {
+                            "filter": {
+                                "param": "mapSelect"
+                            }
+                        }
+                    ],
+                    "encoding": {
+                        "x": {
+                            "field": "value",
+                            "type": "ordinal",
+                            "title": "Price Range",
+                            "scale": {
+                                "domain": [
+                                    " ～￥999",
+                                    "￥1000～￥1999",
+                                    "￥2000～￥2999",
+                                    "￥3000～￥3999",
+                                    "￥4000～￥4999",
+                                    "￥5000～￥5999",
+                                    "￥6000～￥7999",
+                                    "￥8000～￥9999",
+                                    "￥10000～￥14999",
+                                    "￥15000～￥19999",
+                                    "￥20000～￥29999",
+                                    "￥30000～"
+                                ]
+                            }
+                        },
+                        "y": {
+                            "aggregate": "count",
+                            "type": "quantitative",
+                            "title": "Number of Restaurants"
+                        },
+                        "color": {
+                            "field": "key",
+                            "title": "Meal Types"
+                        },
+                        "xOffset": {
+                            "field": "key"
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "legendFilter",
+                                "value": 1
+                            },
+                            "value": 0.2
+                        },
+                        "tooltip": [
+                            {
+                                "field": "key",
+                                "type": "nominal",
+                                "title": "Meal Type"
+                            },
+                            {
+                                "field": "value",
+                                "type": "ordinal",
+                                "title": "Price Range"
+                            },
+                            {
+                                "aggregate": "count",
+                                "type": "quantitative",
+                                "title": "No. of Restaurants"
+                            }
                         ]
                     },
-                    "bind": "legend"
+                    "params": [
+                        {
+                            "name": "legendFilter",
+                            "select": {
+                                "type": "point",
+                                "fields": [
+                                    "key"
+                                ]
+                            },
+                            "bind": "legend"
+                        }
+                    ]
                 }
             ]
         }
