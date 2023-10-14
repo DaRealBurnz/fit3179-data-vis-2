@@ -5,10 +5,10 @@
     },
     "transform": [
         {
-            "filter": "datum.TotalRating > minRating"
+            "filter": "datum.TotalRating >= minRating"
         },
         {
-            "filter": "datum.ReviewNum > minReviews"
+            "filter": "datum.ReviewNum >= minReviews"
         },
         {
             "filter": "datum.Lunch != 'NA'"
@@ -23,7 +23,7 @@
     "params": [
         {
             "name": "minRating",
-            "value": 0,
+            "value": 3,
             "bind": {
                 "input": "range",
                 "min": 3,
@@ -106,6 +106,12 @@
                             "content": "data"
                         }
                     },
+                    "params": [
+                        {
+                            "name": "mapSelect",
+                            "select": "interval"
+                        }
+                    ],
                     "encoding": {
                         "longitude": {
                             "field": "Long",
@@ -115,18 +121,25 @@
                             "field": "Lat",
                             "type": "quantitative"
                         },
+                        "opacity": {
+                            "condition": {
+                                "param": "mapSelect",
+                                "value": 0.8
+                            },
+                            "value": 0.1
+                        },
                         "color": {
                             "field": "TotalRating",
                             "title": "Restaurant Rating",
                             "scale": {
                                 "type": "bin-ordinal",
                                 "range": [
-                                    "#f0f9e8",
-                                    "#ccebc5",
-                                    "#a8ddb5",
-                                    "#7bccc4",
-                                    "#43a2ca",
-                                    "#0868ac"
+                                    "#ffffcc",
+                                    "#d9f0a3",
+                                    "#addd8e",
+                                    "#78c679",
+                                    "#31a354",
+                                    "#006837"
                                 ],
                                 "domain": [
                                     3,
@@ -198,6 +211,14 @@
             "width": 450,
             "height": 450,
             "title": "Restaurant price ranges",
+            "mark": "bar",
+            "transform": [
+                {
+                    "filter": {
+                        "param": "mapSelect"
+                    }
+                }
+            ],
             "encoding": {
                 "x": {
                     "field": "value",
@@ -223,91 +244,57 @@
                 "y": {
                     "aggregate": "count",
                     "type": "quantitative",
-                    "title": "Number of Restaurants",
-                    "axis": {
-                        "tickCount": 10
-                    }
-                }
-            },
-            "layer": [
-                {
-                    "mark": "bar",
-                    "encoding": {
-                        "color": {
-                            "field": "key",
-                            "title": "Meal Types"
-                        },
-                        "xOffset": {
-                            "field": "key"
-                        },
-                        "opacity": {
-                            "condition": {
-                                "param": "legendFilter",
-                                "value": 1
-                            },
-                            "value": 0.2
-                        },
-                        "tooltip": [
-                            {
-                                "field": "key",
-                                "type": "nominal",
-                                "title": "Meal Type"
-                            },
-                            {
-                                "field": "value",
-                                "type": "ordinal",
-                                "title": "Price Range"
-                            },
-                            {
-                                "aggregate": "count",
-                                "type": "quantitative",
-                                "title": "No. of Restaurants"
-                            }
-                        ]
-                    },
-                    "params": [
-                        {
-                            "name": "legendFilter",
-                            "select": {
-                                "type": "point",
-                                "fields": [
-                                    "key"
-                                ]
-                            },
-                            "bind": "legend"
-                        }
-                    ]
+                    "title": "Number of Restaurants"
                 },
+                "color": {
+                    "field": "key",
+                    "title": "Meal Types"
+                },
+                "xOffset": {
+                    "field": "key"
+                },
+                "opacity": {
+                    "condition": {
+                        "param": "legendFilter",
+                        "value": 1
+                    },
+                    "value": 0.2
+                },
+                "tooltip": [
+                    {
+                        "field": "key",
+                        "type": "nominal",
+                        "title": "Meal Type"
+                    },
+                    {
+                        "field": "value",
+                        "type": "ordinal",
+                        "title": "Price Range"
+                    },
+                    {
+                        "aggregate": "count",
+                        "type": "quantitative",
+                        "title": "No. of Restaurants"
+                    }
+                ]
+            },
+            "params": [
                 {
-                    "data": {
-                        "values": [
-                            {
-                                "label": "895 restaurants offer dinner/484 restaurants offer lunch",
-                                "value": "￥30000～"
-                            }
+                    "name": "legendFilter",
+                    "select": {
+                        "type": "point",
+                        "fields": [
+                            "key"
                         ]
                     },
-                    "transform": [
-                        {
-                            "calculate": "split(datum.label, '/')",
-                            "as": "splitLabel"
-                        }
-                    ],
-                    "mark": {
-                        "type": "text",
-                        "align": "right",
-                        "fontSize": 12,
-                        "dx": 10,
-                        "dy": -435
-                    },
-                    "encoding": {
-                        "text": {
-                            "field": "splitLabel"
-                        }
-                    }
+                    "bind": "legend"
                 }
             ]
         }
     ],
-    "resolve": {"scale": {"size": "independent"}}
+    "resolve": {
+        "scale": {
+            "size": "independent"
+        }
+    }
 }
