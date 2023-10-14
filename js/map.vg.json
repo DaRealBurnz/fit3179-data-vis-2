@@ -44,7 +44,7 @@
             }
         }
     ],
-    "hconcat": [
+    "vconcat": [
         {
             "width": 450,
             "height": 450,
@@ -208,8 +208,6 @@
             ]
         },
         {
-            "width": 450,
-            "height": 450,
             "title": "Restaurant price ranges",
             "mark": "bar",
             "transform": [
