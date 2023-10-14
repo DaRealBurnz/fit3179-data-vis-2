@@ -1,12 +1,29 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": 450,
-    "height": 450,
-    "title": "Restaurants in Kyoto",
+    "data": {
+        "url": "data/Kyoto_Restaurant_Info.csv"
+    },
+    "transform": [
+        {
+            "filter": "datum.TotalRating >= minRating"
+        },
+        {
+            "filter": "datum.ReviewNum >= minReviews"
+        },
+        {
+            "filter": "datum.Lunch != 'NA'"
+        },
+        {
+            "fold": [
+                "Dinner",
+                "Lunch"
+            ]
+        }
+    ],
     "params": [
         {
             "name": "minRating",
-            "value": 0,
+            "value": 3,
             "bind": {
                 "input": "range",
                 "min": 3,
@@ -27,100 +44,257 @@
             }
         }
     ],
-    "projection": {
-        "type": "azimuthalEqualArea",
-        "rotate": [-135.755611, -35.021667, 0]
-    },
-    "layer": [
+    "hconcat": [
         {
-            "data": {
-                "url": "data/KyotoMap.json",
-                "format": {
-                    "type": "topojson",
-                    "feature": "Kyoto"
-                }
+            "width": 450,
+            "height": 450,
+            "title": "Restaurants in Kyoto",
+            "projection": {
+                "type": "azimuthalEqualArea",
+                "rotate": [
+                    -135.755611,
+                    -35.021667,
+                    0
+                ]
             },
-            "mark": {
-                "type": "geoshape",
-                "fill": "rosybrown",
-                "stroke": "white"
-            }
-        },
-        {
-            "data": {
-                "url": "data/KyotoMap.json",
-                "format": {
-                    "type": "topojson",
-                    "feature": "OtherPrefectures"
-                }
-            },
-            "mark": {
-                "type": "geoshape",
-                "fill": "lightgray",
-                "stroke": "white"
-            }
-        },
-        {
-            "data": {
-                "url": "data/KyotoMap.json",
-                "format": {
-                    "type": "topojson",
-                    "feature": "graticules"
-                }
-            },
-            "mark": {
-                "type": "geoshape",
-                "stroke": "gray"
-            }
-        },
-        {
-            "data": {
-                "url": "data/Kyoto_Restaurant_Info.csv"
-            },
-            "transform": [
-                {"filter": "datum.TotalRating > minRating"},
-                {"filter": "datum.ReviewNum > minReviews"}
-            ],
-            "mark": {
-                "type": "circle",
-                "tooltip": {"content": "data"}
-            },
-            "encoding": {
-                "longitude": {
-                    "field": "Long",
-                    "type": "quantitative"
+            "layer": [
+                {
+                    "data": {
+                        "url": "data/KyotoMap.json",
+                        "format": {
+                            "type": "topojson",
+                            "feature": "Kyoto"
+                        }
+                    },
+                    "mark": {
+                        "type": "geoshape",
+                        "fill": "rosybrown",
+                        "stroke": "white"
+                    }
                 },
-                "latitude": {
-                    "field": "Lat",
-                    "type": "quantitative"
+                {
+                    "data": {
+                        "url": "data/KyotoMap.json",
+                        "format": {
+                            "type": "topojson",
+                            "feature": "OtherPrefectures"
+                        }
+                    },
+                    "mark": {
+                        "type": "geoshape",
+                        "fill": "lightgray",
+                        "stroke": "white"
+                    }
+                },
+                {
+                    "data": {
+                        "url": "data/KyotoMap.json",
+                        "format": {
+                            "type": "topojson",
+                            "feature": "graticules"
+                        }
+                    },
+                    "mark": {
+                        "type": "geoshape",
+                        "stroke": "gray"
+                    }
+                },
+                {
+                    "mark": {
+                        "type": "circle",
+                        "tooltip": {
+                            "content": "data"
+                        }
+                    },
+                    "params": [
+                        {
+                            "name": "mapSelect",
+                            "select": "interval"
+                        }
+                    ],
+                    "encoding": {
+                        "longitude": {
+                            "field": "Long",
+                            "type": "quantitative"
+                        },
+                        "latitude": {
+                            "field": "Lat",
+                            "type": "quantitative"
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "mapSelect",
+                                "value": 0.8
+                            },
+                            "value": 0.1
+                        },
+                        "color": {
+                            "field": "TotalRating",
+                            "title": "Restaurant Rating",
+                            "scale": {
+                                "type": "bin-ordinal",
+                                "range": [
+                                    "#ffffcc",
+                                    "#d9f0a3",
+                                    "#addd8e",
+                                    "#78c679",
+                                    "#31a354",
+                                    "#006837"
+                                ],
+                                "domain": [
+                                    3,
+                                    3.2,
+                                    3.4,
+                                    3.6,
+                                    3.8,
+                                    4,
+                                    4.2
+                                ]
+                            }
+                        },
+                        "size": {
+                            "field": "ReviewNum",
+                            "type": "quantitative",
+                            "title": "No. of Reviews",
+                            "scale": {
+                                "domain": [
+                                    1,
+                                    200,
+                                    400,
+                                    600,
+                                    800,
+                                    1000,
+                                    1200
+                                ],
+                                "range": [
+                                    30,
+                                    200
+                                ]
+                            }
+                        },
+                        "tooltip": [
+                            {
+                                "field": "Name",
+                                "type": "nominal"
+                            },
+                            {
+                                "field": "JapaneseName",
+                                "type": "nominal",
+                                "title": "Japanese Name"
+                            },
+                            {
+                                "field": "FirstCategory",
+                                "type": "nominal",
+                                "title": "First Category"
+                            },
+                            {
+                                "field": "SecondCategory",
+                                "type": "nominal",
+                                "title": "Second Category"
+                            },
+                            {
+                                "field": "TotalRating",
+                                "type": "quantitative",
+                                "title": "Restaurant Rating"
+                            },
+                            {
+                                "field": "ReviewNum",
+                                "type": "quantitative",
+                                "title": "No. of Reviews"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "width": 450,
+            "height": 450,
+            "title": "Restaurant price ranges",
+            "mark": "bar",
+            "transform": [
+                {
+                    "filter": {
+                        "param": "mapSelect"
+                    }
+                }
+            ],
+            "encoding": {
+                "x": {
+                    "field": "value",
+                    "type": "ordinal",
+                    "title": "Price Range",
+                    "scale": {
+                        "domain": [
+                            " ～￥999",
+                            "￥1000～￥1999",
+                            "￥2000～￥2999",
+                            "￥3000～￥3999",
+                            "￥4000～￥4999",
+                            "￥5000～￥5999",
+                            "￥6000～￥7999",
+                            "￥8000～￥9999",
+                            "￥10000～￥14999",
+                            "￥15000～￥19999",
+                            "￥20000～￥29999",
+                            "￥30000～"
+                        ]
+                    }
+                },
+                "y": {
+                    "aggregate": "count",
+                    "type": "quantitative",
+                    "title": "Number of Restaurants"
                 },
                 "color": {
-                    "field": "TotalRating",
-                    "title": "Restaurant Rating",
-                    "scale": {
-                        "type": "bin-ordinal",
-                        "range": ["#f0f9e8","#ccebc5","#a8ddb5","#7bccc4","#43a2ca","#0868ac"],
-                        "domain": [3,3.2,3.4,3.6,3.8,4,4.2]
-                    }
+                    "field": "key",
+                    "title": "Meal Types"
                 },
-                "size": {
-                    "field": "ReviewNum",
-                    "type": "quantitative",
-                    "title": "No. of Reviews",
-                    "scale": {
-                        "domain": [1, 200, 400, 600, 800, 1000, 1200],
-                        "range": [30,200]
-                    }
+                "xOffset": {
+                    "field": "key"
+                },
+                "opacity": {
+                    "condition": {
+                        "param": "legendFilter",
+                        "value": 1
+                    },
+                    "value": 0.2
                 },
                 "tooltip": [
-                    {"field": "Name", "type": "nominal"},
-                    {"field": "JapaneseName", "type": "nominal", "title": "Japanese Name"},
-                    {"field": "FirstCategory", "type": "nominal", "title": "First Category"},
-                    {"field": "SecondCategory", "type": "nominal", "title": "Second Category"},
-                    {"field": "TotalRating", "type": "quantitative", "title": "Restaurant Rating"},
-                    {"field": "ReviewNum", "type": "quantitative", "title": "No. of Reviews"}
+                    {
+                        "field": "key",
+                        "type": "nominal",
+                        "title": "Meal Type"
+                    },
+                    {
+                        "field": "value",
+                        "type": "ordinal",
+                        "title": "Price Range"
+                    },
+                    {
+                        "aggregate": "count",
+                        "type": "quantitative",
+                        "title": "No. of Restaurants"
+                    }
                 ]
-            }
+            },
+            "params": [
+                {
+                    "name": "legendFilter",
+                    "select": {
+                        "type": "point",
+                        "fields": [
+                            "key"
+                        ]
+                    },
+                    "bind": "legend"
+                }
+            ]
         }
-    ]
+    ],
+    "resolve": {
+        "scale": {
+            "size": "independent"
+        }
+    }
 }
