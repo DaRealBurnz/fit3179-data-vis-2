@@ -1,0 +1,93 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+        "url": "data/Kyoto_Restaurant_Info.csv",
+        "format": {
+            "parse": {
+                "ReviewNum": "number",
+                "TotalRating": "number"
+            }
+        }
+    },
+    "background": "transparent",
+    "width": 500,
+    "layer": [
+        {"mark": "line"},
+        {"mark": {"type": "point", "filled": true}}
+    ],
+    "transform": [
+        {
+            "fold": [
+                "Dinner",
+                "Lunch"
+            ]
+        },
+        {
+            "filter": "datum.value != 'NA'"
+        },
+        {
+            "calculate": "indexof([' ～￥999','￥1000～￥1999','￥2000～￥2999','￥3000～￥3999','￥4000～￥4999','￥5000～￥5999','￥6000～￥7999','￥8000～￥9999','￥10000～￥14999','￥15000～￥19999','￥20000～￥29999','￥30000～'], datum.value)",
+            "as": "index"
+        }
+    ],
+    "encoding": {
+        "x": {
+            "field": "value",
+            "type": "ordinal",
+            "title": "Price Range",
+            "scale": {
+                "domain": [
+                    " ～￥999",
+                    "￥1000～￥1999",
+                    "￥2000～￥2999",
+                    "￥3000～￥3999",
+                    "￥4000～￥4999",
+                    "￥5000～￥5999",
+                    "￥6000～￥7999",
+                    "￥8000～￥9999",
+                    "￥10000～￥14999",
+                    "￥15000～￥19999",
+                    "￥20000～￥29999",
+                    "￥30000～"
+                ]
+            }
+        },
+        "y": {
+            "field": "TotalRating",
+            "aggregate": "average",
+            "title": "Avg. Rating",
+            "scale": {
+                "domain": [
+                    3,
+                    4
+                ]
+            }
+        },
+        "order": {
+            "field": "index",
+            "type": "ordinal"
+        },
+        "color": {
+            "value": "#31a354"
+        },
+        "tooltip": [
+            {
+                "field": "value",
+                "type": "ordinal",
+                "title": "Price Range"
+            },
+            {
+                "field": "TotalRating",
+                "aggregate": "average",
+                "type": "quantitative",
+                "title": "Avg. Rating",
+                "format": ".3s"
+            }
+        ]
+    },
+    "resolve": {
+        "scale": {
+            "color": "independent"
+        }
+    }
+}

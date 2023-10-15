@@ -1,0 +1,102 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+        "url": "data/Kyoto_Restaurant_Info.csv",
+        "format": {
+            "parse": {
+                "ReviewNum": "number",
+                "TotalRating": "number"
+            }
+        }
+    },
+    "background": "transparent",
+    "width": 450,
+    "mark": "bar",
+    "transform": [
+        {
+            "fold": [
+                "Dinner",
+                "Lunch"
+            ]
+        },
+        {
+            "filter": "datum.value != 'NA'"
+        }
+    ],
+    "encoding": {
+        "x": {
+            "field": "value",
+            "type": "ordinal",
+            "title": "Price Range",
+            "scale": {
+                "domain": [
+                    " ～￥999",
+                    "￥1000～￥1999",
+                    "￥2000～￥2999",
+                    "￥3000～￥3999",
+                    "￥4000～￥4999",
+                    "￥5000～￥5999",
+                    "￥6000～￥7999",
+                    "￥8000～￥9999",
+                    "￥10000～￥14999",
+                    "￥15000～￥19999",
+                    "￥20000～￥29999",
+                    "￥30000～"
+                ]
+            }
+        },
+        "y": {
+            "aggregate": "count",
+            "type": "quantitative",
+            "title": "Number of Restaurants"
+        },
+        "color": {
+            "field": "key",
+            "title": "Meal Types"
+        },
+        "xOffset": {
+            "field": "key"
+        },
+        "opacity": {
+            "condition": {
+                "param": "legendFilter",
+                "value": 1
+            },
+            "value": 0.2
+        },
+        "tooltip": [
+            {
+                "field": "key",
+                "type": "nominal",
+                "title": "Meal Type"
+            },
+            {
+                "field": "value",
+                "type": "ordinal",
+                "title": "Price Range"
+            },
+            {
+                "aggregate": "count",
+                "type": "quantitative",
+                "title": "No. of Restaurants"
+            }
+        ]
+    },
+    "params": [
+        {
+            "name": "legendFilter",
+            "select": {
+                "type": "point",
+                "fields": [
+                    "key"
+                ]
+            },
+            "bind": "legend"
+        }
+    ],
+    "resolve": {
+        "scale": {
+            "color": "independent"
+        }
+    }
+}

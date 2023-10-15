@@ -1,3 +1,23 @@
+h1, h2, .subtitle {
+    text-align: center;
+}
+body {
+    background-color: aquamarine;
+}
+main {
+    width: 80%;
+    background-color: whitesmoke;
+    background-clip: padding-box;
+    margin: auto;
+    padding: 32px;
+    padding-top: 1px;
+}
 .center {
     justify-content: center;
+}
+.align-right {
+    justify-content: right;
+}
+.content > div {
+    padding-bottom: 32px;
 }

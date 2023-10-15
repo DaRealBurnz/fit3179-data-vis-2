@@ -1,0 +1,186 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+        "url": "data/Kyoto_Restaurant_Info.csv",
+        "format": {
+            "parse": {
+                "ReviewNum": "number",
+                "TotalRating": "number"
+            }
+        }
+    },
+    "background": "transparent",
+    "title": {
+        "text": "Popularity by Category",
+        "anchor": "middle",
+        "align": "center",
+        "subtitle": [
+            "Select a range on the grey chart to take a closer look",
+            "The line represents the average rating, while the bars represent the average no. of reviews"
+        ],
+        "fontSize": 24
+    },
+    "spacing": 0,
+    "vconcat": [
+        {
+            "height": 50,
+            "width": 1075,
+            "transform": [
+                {
+                    "fold": [
+                        "FirstCategory",
+                        "SecondCategory"
+                    ],
+                    "as": [
+                        "key",
+                        "Category"
+                    ]
+                },
+                {
+                    "filter": "datum.Category != 'NA'"
+                }
+            ],
+            "encoding": {
+                "x": {
+                    "field": "Category",
+                    "axis": null
+                }
+            },
+            "layer": [
+                {
+                    "mark": "bar",
+                    "encoding": {
+                        "y": {
+                            "field": "ReviewNum",
+                            "aggregate": "average",
+                            "axis": null
+                        },
+                        "color": {
+                            "value": "grey"
+                        }
+                    },
+                    "params": [
+                        {
+                            "name": "brush",
+                            "select": {
+                                "type": "interval",
+                                "encodings": [
+                                    "x"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mark": "line",
+                    "encoding": {
+                        "y": {
+                            "field": "TotalRating",
+                            "aggregate": "average",
+                            "axis": null
+                        },
+                        "color": {
+                            "value": "grey"
+                        }
+                    }
+                }
+            ],
+            "resolve": {
+                "scale": {
+                    "y": "independent"
+                }
+            }
+        },
+        {
+            "width": 1075,
+            "height": 300,
+            "transform": [
+                {
+                    "fold": [
+                        "FirstCategory",
+                        "SecondCategory"
+                    ],
+                    "as": [
+                        "key",
+                        "Category"
+                    ]
+                },
+                {
+                    "filter": "datum.Category != 'NA'"
+                },
+                {
+                    "filter": {
+                        "param": "brush"
+                    }
+                }
+            ],
+            "encoding": {
+                "x": {
+                    "field": "Category",
+                    "scale": {
+                        "domain": {
+                            "param": "brush"
+                        }
+                    },
+                    "title": null
+                },
+                "tooltip": [
+                    {
+                        "field": "Category",
+                        "type": "nominal"
+                    },
+                    {
+                        "field": "ReviewNum",
+                        "aggregate": "average",
+                        "title": "Avg. No. of Reviews",
+                        "format": ".3s"
+                    },
+                    {
+                        "field": "TotalRating",
+                        "aggregate": "average",
+                        "title": "Avg. Rating",
+                        "format": ".3s"
+                    }
+                ]
+            },
+            "layer": [
+                {
+                    "mark": "bar",
+                    "encoding": {
+                        "y": {
+                            "field": "ReviewNum",
+                            "aggregate": "average",
+                            "title": "Avg. No. of Reviews"
+                        },
+                        "color": {
+                            "value": "#8856a7"
+                        }
+                    }
+                },
+                {
+                    "mark": "line",
+                    "encoding": {
+                        "y": {
+                            "field": "TotalRating",
+                            "aggregate": "average",
+                            "title": "Avg. Rating"
+                        },
+                        "color": {
+                            "value": "#31a354"
+                        }
+                    }
+                }
+            ],
+            "resolve": {
+                "scale": {
+                    "y": "independent"
+                }
+            }
+        }
+    ],
+    "resolve": {
+        "scale": {
+            "color": "independent"
+        }
+    }
+}

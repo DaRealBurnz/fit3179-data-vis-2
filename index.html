@@ -19,22 +19,59 @@
 </head>
 
 <body>
-  <h1>Popular Restaurants in Kyoto</h1>
-  <div class="pure-g center">
-    <div id="vis1" class="pure-u-11-12"></div>
-    <!-- <div id="vis2" class="pure-u-10-24"></div> -->
-  </div>
+  <main>
+    <h1>Popular Restaurants in Kyoto</h1>
+    <p class="subtitle">Visiting Kyoto? Here are some popular restaurants to visit!</p>
+    <p class="subtitle">Data scraped by <a
+        href="https://www.kaggle.com/datasets/koki25ando/tabelog-restaurant-review-dataset">Koki Ando</a> from <a
+        href="https://tabelog.com/en/">Tabelog</a></p>
+    <div class="pure-g center content">
+      <div id="vis1" class="pure-u-1"></div>
+      <div id="vis2" class="pure-u-1"></div>
+      <h2 class="pure-u-1">Average Rating per Price Range</h2>
+      <div id="vis3" class="pure-u-1-2"></div>
+      <div id="annotation1" class="pure-u-1-2">
+        <p>Unsurprisingly, the average rating increases the more expensive the restaurant is.</p>
+        <p>However, the range of ratings given out is quite tight.
+          As seen here, the average rating only remains between 3.0-3.8 stars</p>
+      </div>
+      <h2 class="pure-u-1">Frequency of Price Ranges</h2>
+      <div id="annotation2" class="pure-u-1-2">
+        <p>Lunch is typically cheaper than dinner, as the distribution for lunch prices is skewed further to the right
+        </p>
+        <p>Note: All restaurants in the dataset offer dinner,
+          while only 484 out of the total 895 restaurants in the dataset offer lunch</p>
+      </div>
+      <div id="vis4" class="pure-u-1-2"></div>
+    </div>
+  </main>
 
   <script type="text/javascript">
     var specVis1 = "js/map.vg.json";
-    // var specVis2 = "js/interactive.vg.json";
+    var specVis2 = "js/category.vg.json";
+    var specVis3 = "js/avgRating.vg.json";
+    var specVis4 = "js/priceRange.vg.json";
 
     vegaEmbed('#vis1', specVis1, { "actions": false }).then(function (result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+      let vis1 = document.getElementById("vis1");
+      let form = vis1.querySelector(".vega-bindings");
+      vis1.insertBefore(form, vis1.children[0]);
+      form.classList.add("pure-g", "align-right");
+      for (child of form.children) {
+        child.classList.add("pure-u-1-5");
+      }
     }).catch(console.error);
-    // vegaEmbed('#vis2', specVis2).then(function(result) {
-    //   // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
-    // }).catch(console.error);
+    vegaEmbed('#vis2', specVis2, { "actions": false }).then(function (result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    vegaEmbed('#vis3', specVis3, { "actions": false }).then(function (result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    vegaEmbed('#vis4', specVis4, { "actions": false }).then(function (result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+
   </script>
 </body>
 
